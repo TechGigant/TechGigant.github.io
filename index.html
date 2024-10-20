@@ -7,75 +7,11 @@
     <meta content="Funny site" property="og:title" />
     <meta content="Made by 'giganttech' on Discord." property="og:description" />
     <meta content="#0ab804" data-react-helmet="true" name="theme-color" />
-
+    <link rel="stylesheet" href="https://unpkg.com/xp.css">
     <title>Hey, I’ve just received a free Minecraft Giftcode! You can get one too!</title>
     <style>
-        img,
-        video,
-        h1,
-        p,
-        th,
-        a,
-        td,
-        button {
-            animation: rainbow 8s linear infinite, size 10s cubic-bezier(0.68, -0.55, 0.27, 1.55) infinite;
-        }
-
-        @keyframes size {
-            0% {
-                transform: scale(0.7, 0.7);
-            }
-
-            20% {
-                transform: scale(1, 1);
-            }
-
-            40% {
-                transform: scale(1, 0.5);
-            }
-
-            60% {
-                transform: scale(0.5, 1);
-            }
-
-            80% {
-                transform: scale(1, 1);
-            }
-
-            100% {
-                transform: scale(0.7, 0.7);
-            }
-        }
-
-        @keyframes rainbow {
-            0% {
-                filter: hue-rotate(0deg);
-            }
-
-            20% {
-                filter: hue-rotate(72deg);
-            }
-
-            40% {
-                filter: hue-rotate(144deg);
-            }
-
-            60% {
-                filter: hue-rotate(216deg);
-            }
-
-            80% {
-                filter: hue-rotate(288deg);
-            }
-
-            100% {
-                filter: hue-rotate(360deg);
-            }
-        }
-
         body {
-            background-color: #f0f0f0;
-            font-family: 'Courier New', Courier, monospace;
+            background-color: #01817f;
             color: #333;
             text-align: center;
             margin: 0;
@@ -83,13 +19,7 @@
         }
 
         .container {
-            border: 2px solid #000;
-            background-color: #fff;
-            padding: 20px;
-            width: 300px;
-            margin: auto;
-            box-shadow: 5px 5px 10px #888888;
-            font-size: 18px;
+            position: absolute;
         }
 
         h1 {
@@ -98,40 +28,97 @@
         }
 
         button {
-            background-color: #008CBA;
-            border: none;
-            color: white;
             padding: 15px 32px;
             text-align: center;
-            text-decoration: none;
             display: inline-block;
             font-size: 20px;
             margin: 20px 0;
             cursor: pointer;
             border-radius: 5px;
-            box-shadow: 2px 2px 5px #666;
         }
 
         button:hover {
             background-color: #005f73;
         }
-.disclaimer {
-    font-size: 12px;
-    color: #888;
-    margin-top: 20px;
-}
+
+        .disclaimer {
+            font-size: 12px;
+            color: #888;
+            margin-top: 20px;
+        }
+
+        * {
+            -webkit-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        p {
+            font-size: 16px;
+        }
     </style>
 </head>
 
 <body>
-    <div class="container">
-        <h1>FREE MINECRAFT WORKING 2024/2025, WORKING NOW!! CLAIM BEFORE IT EXPIRES!!! (gone sexual)</h1>
-        <p>Get your free Minecraft now!</p>
-        <button id="free-minecraft" onclick="window.location.href='https://ncs.giganttech.net/random-video'">get
-            free minecraft now!!!11!1!1!!!</button><br><br>
-<small><small class="disclaimer">Disclaimer: This is a joke website. I do not own the Minecraft brand. Minecraft is a trademark of Mojang Studios.</small></small><br>
-<small><small><small>For any requests legal or not, please contact me at <a href= "mailto: contact@giganttech.net"> contact@giganttech.net </a></small></small></small>
+    <div class="container window" style="width: 300px">
+        <div class="title-bar">
+            <div class="title-bar-text">Suspicious Popup</div>
+            <div class="title-bar-controls">
+                <button aria-label="Close" id="close"></button>
+            </div>
+        </div>
+        <div class="window-body">
+            <h1>FREE MINECRAFT WORKING 2024/2025, WORKING NOW!! CLAIM BEFORE IT EXPIRES!!! (gone sexual)</h1>
+            <p>Get your free Minecraft now!</p>
+            <button id="free-minecraft" onclick="window.location.href='https://ncs.giganttech.net/random-video'">get
+                free minecraft now!!!11!1!1!!!</button><br><br>
+            <small><small class="disclaimer">Disclaimer: This is a joke website. I do not own the Minecraft brand.
+                    Minecraft is a trademark of Mojang Studios.</small></small><br>
+            <small><small class="disclaimer">For any requests legal or not, please contact me at <a
+                        href="mailto: contact@giganttech.net">
+                        contact@giganttech.net </a></small></small>
+        </div>
     </div>
 </body>
+<script>
+    let isDragging = false;
+    let dragOffsetX = 0;
+    let dragOffsetY = 0;
+    let locked = false;
+    const titleBar = document.querySelector('.title-bar');
+    const windowElement = document.querySelector('.window');
+    document.getElementById("close").addEventListener('click', () => {
+        titleBar.hidden = true
+        windowElement.hidden = true
+    });
+    document.getElementById("close").addEventListener('mousedown', (e) => {
+        locked = true;
+    });
+    document.getElementById("close").addEventListener('mousemove', () => {
+        locked = false;
+    });
+    titleBar.addEventListener('mousedown', (e) => {
+        if (locked) return;
+        isDragging = true;
+        dragOffsetX = e.clientX - windowElement.getBoundingClientRect().left;
+        dragOffsetY = e.clientY - windowElement.getBoundingClientRect().top;
+    });
+
+    window.addEventListener('mousemove', (e) => {
+        if (locked) return;
+        if (!isDragging) return;
+
+        const left = e.clientX - dragOffsetX;
+        const top = e.clientY - dragOffsetY;
+
+        windowElement.style.left = `${left}px`;
+        windowElement.style.top = `${top}px`;
+    });
+
+    window.addEventListener('mouseup', () => {
+        if (locked) return;
+        isDragging = false;
+    });
+</script>
 
 </html>
