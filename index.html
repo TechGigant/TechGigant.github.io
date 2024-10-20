@@ -81,44 +81,70 @@
     </div>
 </body>
 <script>
-    let isDragging = false;
-    let dragOffsetX = 0;
-    let dragOffsetY = 0;
-    let locked = false;
-    const titleBar = document.querySelector('.title-bar');
-    const windowElement = document.querySelector('.window');
-    document.getElementById("close").addEventListener('click', () => {
-        titleBar.hidden = true
-        windowElement.hidden = true
-    });
-    document.getElementById("close").addEventListener('mousedown', (e) => {
-        locked = true;
-    });
-    document.getElementById("close").addEventListener('mousemove', () => {
-        locked = false;
-    });
-    titleBar.addEventListener('mousedown', (e) => {
-        if (locked) return;
-        isDragging = true;
-        dragOffsetX = e.clientX - windowElement.getBoundingClientRect().left;
-        dragOffsetY = e.clientY - windowElement.getBoundingClientRect().top;
-    });
+let isDragging = false;
+let dragOffsetX = 0;
+let dragOffsetY = 0;
+let locked = false;
+const titleBar = document.querySelector('.title-bar');
+const windowElement = document.querySelector('.window');
 
-    window.addEventListener('mousemove', (e) => {
-        if (locked) return;
-        if (!isDragging) return;
+// Close window
+document.getElementById("close").addEventListener('click', () => {
+    titleBar.hidden = true;
+    windowElement.hidden = true;
+});
 
-        const left = e.clientX - dragOffsetX;
-        const top = e.clientY - dragOffsetY;
+document.getElementById("close").addEventListener('mousedown', (e) => {
+    locked = true;
+});
+document.getElementById("close").addEventListener('mousemove', () => {
+    locked = false;
+});
+document.getElementById("close").addEventListener('touchstart', (e) => {
+    locked = true;
+});
+document.getElementById("close").addEventListener('touchmove', () => {
+    locked = false;
+});
 
-        windowElement.style.left = `${left}px`;
-        windowElement.style.top = `${top}px`;
-    });
+// Start dragging with mouse or touch
+function startDrag(e) {
+    if (locked) return;
+    isDragging = true;
+    const clientX = e.clientX || e.touches[0].clientX;
+    const clientY = e.clientY || e.touches[0].clientY;
+    dragOffsetX = clientX - windowElement.getBoundingClientRect().left;
+    dragOffsetY = clientY - windowElement.getBoundingClientRect().top;
+}
 
-    window.addEventListener('mouseup', () => {
-        if (locked) return;
-        isDragging = false;
-    });
+titleBar.addEventListener('mousedown', startDrag);
+titleBar.addEventListener('touchstart', startDrag);
+
+// Handle dragging with mouse or touch
+function drag(e) {
+    if (locked || !isDragging) return;
+
+    const clientX = e.clientX || e.touches[0].clientX;
+    const clientY = e.clientY || e.touches[0].clientY;
+    const left = clientX - dragOffsetX;
+    const top = clientY - dragOffsetY;
+
+    windowElement.style.left = `${left}px`;
+    windowElement.style.top = `${top}px`;
+}
+
+window.addEventListener('mousemove', drag);
+window.addEventListener('touchmove', drag);
+
+// Stop dragging with mouse or touch
+function stopDrag() {
+    if (locked) return;
+    isDragging = false;
+}
+
+window.addEventListener('mouseup', stopDrag);
+window.addEventListener('touchend', stopDrag);
+
 </script>
 
 </html>
