@@ -92,6 +92,7 @@ const windowElement = document.querySelector('.window');
 document.getElementById("close").addEventListener('click', () => {
     titleBar.hidden = true;
     windowElement.hidden = true;
+    window.close();
 });
 
 document.getElementById("close").addEventListener('mousedown', (e) => {
